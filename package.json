@@ -1,0 +1,35 @@
+{
+  "name": "swc_admin_panel",
+  "version": "1.0.0",
+  "description": "A package to build admin panels for the projects of Student Web Committee of IIT Guwahati(SWC IITG)",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "swc_admin_panel": "bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "SWC",
+    "Admin",
+    "Panel"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swciitg/swc_admin_panel.git"
+  },
+  "dependencies": {
+    "fs-extra": "^11.1.1",
+    "ejs": "^3.1.9"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "author": "Students Web Committee IIT Guwahati(SWC IITG)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swciitg/swc_admin_panel/issues"
+  },
+  "homepage": "https://github.com/swciitg/swc_admin_panel#readme"
+}
