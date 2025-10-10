@@ -21,13 +21,14 @@ export async function generateProject({ projectPath, models, projectRoot }) {
     await fs.ensureDir(path.join(projectPath, folder));
   }
 
-  const templateFolder = path.join(__dirname, "templates");
+  const templateFolder = path.join(__dirname, "template/admin-panel");
 
   const staticFiles = [
     { src: "app/layout.js", dest: "app/layout.js" },
     { src: "app/page.js", dest: "app/page.js" },
     { src: "app/admin/login/page.js", dest: "app/admin/login/page.js" },
     { src: "lib/auth.js", dest: "lib/auth.js" },
+    { src: "lib/dbConnect.js", dest: "lib/dbConnect.js" },
     { src: "config/admin.js", dest: "config/admin.js" },
     { src: "styles/globals.css", dest: "styles/globals.css" },
     { src: "components/TableView.js", dest: "components/TableView.js" }
