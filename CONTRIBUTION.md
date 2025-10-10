@@ -26,9 +26,17 @@ Use descriptive branch names for features, fixes, or bugs.
 
 ### 4. Testing Changes
 Test CLI functionality locally:
+In this repo, on your local terminal run
 ```bash
-npx <package-name>
+npm link
 ```
+Then open the test backend folder where you want to create the admin panel and run 
+```bash
+npm link swc_admin_panel
+cd admin-panel
+npm install
+```
+
 Ensure the admin panel generates correctly in a fresh project.
 
 Verify:
