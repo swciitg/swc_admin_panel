@@ -1,0 +1,33 @@
+<%
+/*
+  dbConnect.ejs
+  Reusable MongoDB connection helper using Mongoose.
+  Ensures only one connection (prevents duplicate connections during hot reload).
+*/
+%>
+import mongoose from "mongoose";
+
+let isConnected = false;
+
+export async function dbConnect() {
+  if (isConnected) return;
+
+  if (mongoose.connection.readyState >= 1) {
+    isConnected = true;
+    return;
+  }
+
+  const uri = process.env.MONGODB_URI;
+
+  if (!uri) {
+    throw new Error("MONGODB_URI is missing in environment variables");
+  }
+
+  await mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  isConnected = true;
+  console.log("MongoDB connected successfully");
+}

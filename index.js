@@ -66,4 +66,15 @@ export async function generateProject({ projectPath, models, projectRoot }) {
     await fs.writeFile(path.join(apiDir, "route.js"), renderedApi, "utf-8");
   }
 
+  const dbConnectTemplate = path.join(templateFolder, "lib/dbConnect.ejs");
+  const dbConnectOutput = path.join(projectPath, "lib/dbConnect.js");
+
+  if (await fs.pathExists(dbConnectTemplate)) {
+    const dbContent = await fs.readFile(dbConnectTemplate, "utf-8");
+    await fs.writeFile(dbConnectOutput, dbContent, "utf-8");
+    console.log("dbConnect.js generated successfully");
+  } else {
+    console.warn("dbConnect.ejs template not found, skipping dbConnect.js");
+  }
+
 }
