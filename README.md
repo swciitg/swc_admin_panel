@@ -85,7 +85,7 @@ We welcome contributions from the community! Whether you're fixing bugs, adding 
 
 ### Getting Started
 
-Please read our [**CONTRIBUTING.md**](CONTRIBUTING.md) guide for detailed information
+Please read our [**CONTRIBUTING.md**](CONTRIBUTION.md) guide for detailed information
 
 
 ## License
