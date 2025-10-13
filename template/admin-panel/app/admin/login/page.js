@@ -115,7 +115,7 @@ export default function LoginPage() {
             </div>
 
             {/* Right Image Section */}
-            <div className="hidden md:flex w-1/2 h-screen items-center justify-center">
+            <div className="hidden md:flex w-1/2 h-screen flex-1 items-center justify-center">
                 <img
                     src={LoginImg}
                     alt="Login illustration"
