@@ -11,7 +11,12 @@ const TableView = ({ data }) => {
   }
 
   // Extract headers from the first object's keys
-  const headers = Object.keys(data[0]);
+  const headers = Array.from(
+    data.reduce((set, row) => {
+      Object.keys(row || {}).forEach((k) => set.add(k));
+      return set;
+    }, new Set())
+  );
 
   return (
     <div style={styles.container}>
