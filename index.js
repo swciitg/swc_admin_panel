@@ -2,6 +2,7 @@ import fs from "fs-extra";
 import path from "path";
 import ejs from "ejs";
 import { fileURLToPath } from "url";
+import logger from "./lib/logger.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,13 +47,16 @@ export async function generateProject({ projectPath, models = [], projectRoot })
       const exists = await fs.pathExists(srcPath);
       if (!exists) {
         // console.warn(`Template file missing, skipping: ${srcPath}`);
+        await logger.warn(`Template file missing, skipping: ${srcPath}`);
         continue;
       }
       await fs.ensureDir(path.dirname(destPath));
       await fs.copy(srcPath, destPath, { overwrite: true });
       // console.log(`Copied: ${file.src} → ${file.dest}`);
+      await logger.info(`Copied: ${file.src} → ${file.dest}`, { dest: destPath });
     } catch (err) {
       // console.warn(`Failed to copy ${srcPath}: ${err.message}`);
+      await logger.error(`Failed to copy ${srcPath}: ${err.message}`, { stack: err.stack });
     }
   }
 
@@ -66,9 +70,11 @@ export async function generateProject({ projectPath, models = [], projectRoot })
 
   if (!pageTplExists) {
     // console.warn(`Model page template not found: ${modelPageTemplate} (model pages will be skipped)`);
+    await logger.warn(`Model page template not found: ${modelPageTemplate} (model pages will be skipped)`);
   }
   if (!apiTplExists) {
     // console.warn(`Model API template not found: ${apiRouteTemplate} (model api routes will be skipped)`);
+    await logger.warn(`Model API template not found: ${apiRouteTemplate} (model api routes will be skipped)`);
   }
 
   for (const model of models) {
@@ -89,8 +95,10 @@ export async function generateProject({ projectPath, models = [], projectRoot })
         const pageTemplateContent = await fs.readFile(modelPageTemplate, "utf-8");
         const renderedPage = ejs.render(pageTemplateContent, modelData);
         await fs.writeFile(path.join(modelDir, "page.js"), renderedPage, "utf-8");
+        await logger.info(`Rendered admin page for model: ${model}`, { path: path.join(modelDir, "page.js") });
       } catch (err) {
         // console.warn(`Failed to render/write admin page for model ${model}: ${err.message}`);
+        await logger.error(`Failed to render/write admin page for model ${model}: ${err.message}`, { model, stack: err.stack });
       }
     }
 
@@ -111,8 +119,10 @@ export async function generateProject({ projectPath, models = [], projectRoot })
         const apiTemplateContent = await fs.readFile(apiRouteTemplate, "utf-8");
         const renderedApi = ejs.render(apiTemplateContent, modelData);
         await fs.writeFile(path.join(apiDir, "route.js"), renderedApi, "utf-8");
+        await logger.info(`Rendered API route for model: ${model}`, { path: path.join(apiDir, "route.js") });
       } catch (err) {
         // console.warn(`Failed to render/write api route for model ${model}: ${err.message}`);
+        await logger.error(`Failed to render/write api route for model ${model}: ${err.message}`, { model, stack: err.stack });
       }
     }
   }
@@ -132,11 +142,14 @@ export async function generateProject({ projectPath, models = [], projectRoot })
       });
       await fs.writeFile(packageOutputPath, rendered, "utf8");
       // console.log("package.json generated at", packageOutputPath);
+      await logger.info("package.json generated", { path: packageOutputPath });
     } else {
       // console.warn("package.json.ejs template not found; skipping package.json generation.");
+      await logger.warn("package.json.ejs template not found; skipping package.json generation.");
     }
   } catch (err) {
     // console.warn("Error while generating package.json (ignored):", err.message);
+    await logger.error("Error while generating package.json (ignored):", { message: err.message, stack: err.stack });
   }
 
   return { projectPath };
