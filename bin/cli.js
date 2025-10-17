@@ -4,6 +4,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import { fileURLToPath } from 'url';
 import { generateProject } from '../index.js';
+import logger from '../lib/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,7 +14,7 @@ async function main() {
   const modelsPath = path.join(projectRoot, 'models');
 
   if (!fs.existsSync(modelsPath)) {
-    console.error('No models directory found in the project root for mongo schemas.');
+    await logger.error('No models directory found in the project root for mongo schemas.');
     process.exit(1);
   }
 
@@ -23,14 +24,14 @@ async function main() {
     .map(file => file.replace(/\.[jt]s$/, ''));
 
   if (modelFiles.length === 0) {
-    console.error('No models found inside the "models" folder.');
+    await logger.error('No models found inside the "models" folder.');
     process.exit(1);
   }
 
   const adminPanelPath = path.join(projectRoot, 'admin-panel');
 
   if (fs.existsSync(adminPanelPath)) {
-    console.error('"admin-panel" folder already exists. Delete or rename it first.');
+    await logger.error('"admin-panel" folder already exists. Delete or rename it first.');
     process.exit(1);
   }
 
