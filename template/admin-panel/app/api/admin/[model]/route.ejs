@@ -1,0 +1,19 @@
+import {NextResponse} from "next/server";
+import { dbConnect } from "@/lib/dbConnect";
+import <%= modelName %> from '<%= modelImportPath %>';
+// to identify the model and get relative path through modelImportPath
+
+export async function GET(){
+    try{
+        await dbConnect();
+        const data = await <%= modelName %>.find({}).lean();
+            // lean() is used to convert the mongoose document to a plain JavaScript object
+        return NextResponse.json({data},{status:200},{message:"Data fetched successfully"});
+    }
+    catch(error){
+        return NextResponse.json(
+            {error:error.message},
+            {status:500}
+        );
+    }
+}
