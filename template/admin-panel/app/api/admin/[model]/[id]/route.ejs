@@ -1,0 +1,22 @@
+import {NextResponse} from "next/server";
+import { dbConnect } from "@/lib/dbConnect";
+import <%= modelName %> from '<%= modelImportPath %>';
+// to identify the model and get relative path through modelImportPath
+
+export async function DELETE(request, {params}) {
+    try {
+        await dbConnect();
+        const id = params.id;
+        const deleted = await <%= modelName %>.findByIdAndDelete(id);
+        return NextResponse.json(
+            {status:200}, 
+            {message: "Successfully deleted"}
+        );
+    }
+    catch (error) {
+        return NextResponse.json(
+            {error: error.message},
+            {status:500}
+        );
+    }
+}
