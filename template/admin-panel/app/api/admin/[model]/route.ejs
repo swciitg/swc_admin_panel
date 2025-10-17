@@ -23,7 +23,7 @@ export async function POST(request) {
         await dbConnect();
         const body = await request.json();
         const data = body.data;
-        const savedData = await <%= modelName %>.insertOne();
+        const savedData = await <%= modelName %>.insertOne(data);
         return NextResponse.json(
             {status:200}, 
             {message: "Data added successfully"}
