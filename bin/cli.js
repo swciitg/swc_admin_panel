@@ -4,7 +4,10 @@ import path from 'path';
 import fs from 'fs-extra';
 import { fileURLToPath } from 'url';
 import { generateProject } from '../index.js';
+
+import { setupTailwind } from "../lib/setupTailwind.js";
 import logger from '../lib/logger.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,12 +37,15 @@ async function main() {
     await logger.error('"admin-panel" folder already exists. Delete or rename it first.');
     process.exit(1);
   }
-
+  await logger.info("Generating admin panel...");
   await generateProject({
     projectPath: adminPanelPath,
     models: modelFiles,
     projectRoot
   });
+  await logger.info("Setting up Tailwind CSS...");
+  await setupTailwind(adminPanelPath);
+  await logger.info("Admin panel ready with Tailwind configured!");
 }
 
 main();
