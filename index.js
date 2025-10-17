@@ -2,7 +2,7 @@ import fs from "fs-extra";
 import path from "path";
 import ejs from "ejs";
 import { fileURLToPath } from "url";
-
+import {setupTailwind} from './lib/setupTailwind.js'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -34,7 +34,9 @@ export async function generateProject({ projectPath, models = [], projectRoot })
     { src: "lib/dbConnect.js", dest: "lib/dbConnect.js" },
     { src: "config/admin.js", dest: "config/admin.js" },
     { src: "styles/globals.css", dest: "styles/globals.css" },
-    { src: "components/TableView.js", dest: "components/TableView.js" }
+    { src: "components/TableView.js", dest: "components/TableView.js" },
+    ,
+
   ];
 
   // Copy static files (avoid ENOENT)
@@ -138,6 +140,7 @@ export async function generateProject({ projectPath, models = [], projectRoot })
   } catch (err) {
     // console.warn("Error while generating package.json (ignored):", err.message);
   }
-
+  //Setting up tailwind 
+  await setupTailwind(projectPath);
   return { projectPath };
 }
