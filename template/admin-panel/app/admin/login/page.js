@@ -3,8 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { FcGoogle } from "react-icons/fc";
-import { FaGithub, FaFacebookF } from "react-icons/fa";
+import { PiMicrosoftOutlookLogoLight } from "react-icons/pi";
 import LoginImg from '../../public/login.jpg'
 
 export default function LoginPage() {
@@ -93,17 +92,14 @@ export default function LoginPage() {
                     </div>
 
                     {/* Social Login Buttons */}
-                    <div className="flex justify-center gap-4">
-                        <button className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full hover:bg-gray-200">
-                            <FcGoogle size={22} />
-                        </button>
-                        <button className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full hover:bg-gray-200">
-                            <FaGithub size={20} />
-                        </button>
-                        <button className="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full hover:bg-gray-200">
-                            <FaFacebookF size={20} className="text-blue-600" />
-                        </button>
-                    </div>
+                    <button className="flex justify-center gap-4">
+                        <div>
+                            <PiMicrosoftOutlookLogoLight size={20} />
+                        </div>
+                        <div className="text-sm">
+                            Login with Outlook
+                        </div>
+                    </button>
 
                     <p className="text-sm text-center mt-6">
                         Don't have an account?{" "}
