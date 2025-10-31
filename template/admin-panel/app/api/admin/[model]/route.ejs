@@ -1,7 +1,8 @@
 import {NextResponse} from "next/server";
-import { dbConnect } from "@/lib/dbConnect";
+import dbConnect from "@/lib/dbConnect";
 import <%= modelName %> from '<%= modelImportPath %>';
 // to identify the model and get relative path through modelImportPath
+
 
 export async function GET(){
     try{
