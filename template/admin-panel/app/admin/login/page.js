@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { PiMicrosoftOutlookLogoLight } from "react-icons/pi";
-import LoginImg from '../../public/login.jpg'
+
 
 export default function LoginPage() {
     const router = useRouter();
@@ -113,7 +113,7 @@ export default function LoginPage() {
             {/* Right Image Section */}
             <div className="hidden md:flex w-1/2 h-screen flex-1 items-center justify-center">
                 <img
-                    src={LoginImg}
+                    src='/login.jpg'
                     alt="Login illustration"
                     className="w-3/4"
                 />

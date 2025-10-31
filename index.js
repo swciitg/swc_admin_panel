@@ -3,7 +3,7 @@ import path from "path";
 import ejs from "ejs";
 import { fileURLToPath } from "url";
 import {setupTailwind} from './lib/setupTailwind.js'
-import logger from "./lib/logger";
+import logger from "./lib/logger.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -17,8 +17,10 @@ export async function generateProject({ projectPath, models = [], projectRoot })
     "app/api/admin",
     "components",
     "lib",
-    "config",
-    "styles"
+    "configs",
+    "styles",
+    "public",
+    "models"
   ];
 
   for (const folder of folders) {
@@ -33,10 +35,11 @@ export async function generateProject({ projectPath, models = [], projectRoot })
     { src: "app/admin/login/page.js", dest: "app/admin/login/page.js" },
     { src: "lib/auth.js", dest: "lib/auth.js" },
     { src: "lib/dbConnect.js", dest: "lib/dbConnect.js" },
-    { src: "config/admin.js", dest: "config/admin.js" },
+    { src: "configs/admin.js", dest: "configs/admin.js" },
     { src: "styles/globals.css", dest: "styles/globals.css" },
     { src: "components/TableView.js", dest: "components/TableView.js" },
-    ,
+    { src: "app/public/favicon.ico", dest: "public/favicon.ico" },
+    { src: "app/public/login.jpg", dest: "public/login.jpg" },
 
   ];
 
@@ -119,27 +122,34 @@ export async function generateProject({ projectPath, models = [], projectRoot })
       }
     }
   }
+  // Render different config files  from different ejs templates in templates/
+  const templateFiles = [
+    { ejs: "next.config.js.ejs", out: "next.config.js", log: "next.config.js generated at" },
+    { ejs: ".eslintrc.js.ejs", out: ".eslintrc.js", log: ".eslintrc.js generated at" },
+    { ejs: "package.json.ejs", out: "package.json", log: "package.json generated at" },
+    { ejs: ".gitignore.ejs", out: ".gitignore", log: ".gitignore generated at" },
+  ];
+  for (const file of templateFiles) {
+    try {
+      const templatePath = path.join(__dirname, "templates", file.ejs);
+      const outputPath = path.join(projectPath, file.out);
 
-  // Render package.json from templates/package.json.ejs
-  try {
-    const packageTemplatePath = path.join(__dirname, "templates", "package.json.ejs");
-    const packageOutputPath = path.join(projectPath, "package.json");
-
-    const tplExists = await fs.pathExists(packageTemplatePath);
-    if (tplExists) {
-      const tplContent = await fs.readFile(packageTemplatePath, "utf8");
-      const rendered = ejs.render(tplContent, {
-        projectName: path.basename(projectPath),
-        models,
-        projectRoot
-      });
-      await fs.writeFile(packageOutputPath, rendered, "utf8");
-      await logger.log("package.json generated at", packageOutputPath);
-    } else {
-      await logger.warn("package.json.ejs template not found; skipping package.json generation.");
+      const tplExists = await fs.pathExists(templatePath);
+      if (tplExists) {
+        const tplContent = await fs.readFile(templatePath, "utf8");
+        const rendered = ejs.render(tplContent, {
+          projectName: path.basename(projectPath),
+          models,
+          projectRoot
+        });
+        await fs.writeFile(outputPath, rendered, "utf8");
+        await logger.log(file.log, outputPath);
+      } else {
+        await logger.warn(`${file.ejs} template not found; skipping ${file.out}`);
+      }
+    } catch (err) {
+      await logger.warn(`Error while generating ${file.out} (ignored):`, err.message);
     }
-  } catch (err) {
-    await logger.warn("Error while generating package.json (ignored):", err.message);
   }
   //Setting up tailwind 
   await setupTailwind(projectPath);

@@ -1,27 +1,30 @@
 'use client';
 import { useState, useEffect } from 'react';
 import TableView from '@/components/TableView';
-export default function <%= modelName%>AdminPage(){
-    const [data,setData]= useState([]);
-    const [error,setError] = useState(null);
-    const fetchData = async()=>{
-        try{
-            const res = await fetch('/api/admin/<%= modelName %>');
-            if(!res.ok) throw new Error(`Status: ${res.status} | Error occured during data fetching`)
-            const result = await res.json();
-            setData(result.data|| []);
-            setError(null);
-        }
-        catch(error){
-            setError(error.message);
-            console.error("Error in fetching module <%= modelName%>",error)
-        }
-    }
-    useEffect(()=>{
-        fetchData();
-    },[])
 
-     if (error) {
+export default function <%- modelName %>AdminPage() {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const res = await fetch('/api/admin/<%= modelName %>');
+      if (!res.ok)
+        throw new Error(`Status: ${res.status} | Error occurred during data fetching`);
+      const result = await res.json();
+      setData(result.data || []);
+      setError(null);
+    } catch (error) {
+      setError(error.message);
+      console.error("Error in fetching module <%= modelName %>", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (error) {
     return (
       <div style={{ padding: '20px', color: 'red' }}>
         <h2>Error loading <%= modelName %> data</h2>
@@ -32,7 +35,8 @@ export default function <%= modelName%>AdminPage(){
       </div>
     );
   }
-   return (
+
+  return (
     <div>
       <div style={{ padding: '20px', borderBottom: '1px solid #ddd' }}>
         <h1><%= modelName %> Management</h1>

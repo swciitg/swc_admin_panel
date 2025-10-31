@@ -1,0 +1,14 @@
+/** @type {import('next').NextConfig} */
+const path = require('path');
+
+const nextConfig = {
+  turbopack: {
+    root: __dirname, // absolute path required
+  },
+  images: {
+    remotePatterns: [],
+  },
+  output: 'standalone',
+};
+
+module.exports = nextConfig;
